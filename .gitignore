@@ -7,3 +7,7 @@
 
 # tf variable files may include sensitive data
 *.tfvars
+
+# ignore crash logs
+
+crash.log
