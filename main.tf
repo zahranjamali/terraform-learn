@@ -9,6 +9,7 @@ variable env_prefix {}
 variable my_ip {}
 variable instance_type {}
 variable public_key_location {}
+variable private_key_location {}
 
 
 resource "aws_vpc" "myapp-vpc" {
@@ -114,7 +115,21 @@ resource "aws_instance" "myapp-server" {
   vpc_security_group_ids = [aws_default_security_group.default-sg.id]
   subnet_id = aws_subnet.myapp-subnet-1.id
 
-  user_data = file("entry-script.sh")
+  #user_data = file("entry-script.sh")
+
+  connection {
+    type = "ssh"
+    host = self.public_ip
+    user = "ec2-user"
+    private_key = file(var.private_key_location)
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "export ENV=dev",
+      "mkdir newdir"
+    ]
+  }
 
    tags = {
     Name: "${var.env_prefix}-server"
