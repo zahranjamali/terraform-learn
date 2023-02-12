@@ -99,7 +99,7 @@ output "aws_public_ip" {
 
 resource "aws_key_pair" "ssh-key" {
   key_name   = "server-key"
-  public_key = "${file(var.public_key_location)}"
+  public_key = file(var.public_key_location)
 }
 
 resource "aws_instance" "myapp-server" {
@@ -113,6 +113,8 @@ resource "aws_instance" "myapp-server" {
 
   vpc_security_group_ids = [aws_default_security_group.default-sg.id]
   subnet_id = aws_subnet.myapp-subnet-1.id
+
+  user_data = file("entry-script.sh")
 
    tags = {
     Name: "${var.env_prefix}-server"
