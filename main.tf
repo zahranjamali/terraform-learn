@@ -114,9 +114,45 @@ resource "aws_instance" "myapp-server" {
   vpc_security_group_ids = [aws_default_security_group.default-sg.id]
   subnet_id = aws_subnet.myapp-subnet-1.id
 
-  user_data = file("entry-script.sh")
+  #user_data = file("entry-script.sh")
 
    tags = {
     Name: "${var.env_prefix}-server"
   }
 }
+/*resource "aws_instance" "myapp-server_2" {
+  ami = data.aws_ami.latest-amazon-linux-image.id
+
+  instance_type = var.instance_type
+  associate_public_ip_address = true
+
+  availability_zone = var.avail_zone
+  key_name = aws_key_pair.ssh-key.key_name
+
+  vpc_security_group_ids = [aws_default_security_group.default-sg.id]
+  subnet_id = aws_subnet.myapp-subnet-1.id
+
+  user_data = file("entry-script.sh")
+
+   tags = {
+    Name: "${var.env_prefix}-server_2"
+  }
+}
+resource "aws_instance" "myapp-server_3" {
+  ami = data.aws_ami.latest-amazon-linux-image.id
+
+  instance_type = var.instance_type
+  associate_public_ip_address = true
+
+  availability_zone = var.avail_zone
+  key_name = aws_key_pair.ssh-key.key_name
+
+  vpc_security_group_ids = [aws_default_security_group.default-sg.id]
+  subnet_id = aws_subnet.myapp-subnet-1.id
+
+  user_data = file("entry-script.sh")
+
+   tags = {
+    Name: "${var.env_prefix}-server_3"
+  }
+}*/
