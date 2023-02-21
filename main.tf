@@ -9,9 +9,11 @@ variable env_prefix {}
 variable my_ip {}
 variable instance_type {}
 variable public_key_location {}
+#variable ssh_key_private {}
 
 
 resource "aws_vpc" "myapp-vpc" {
+    enable_dns_hostnames = true
     cidr_block = var.vpc_cidr_blocks
     tags = {
         Name: "${var.env_prefix}-vpc"
@@ -120,7 +122,18 @@ resource "aws_instance" "myapp-server" {
     Name: "${var.env_prefix}-server"
   }
 }
-/*resource "aws_instance" "myapp-server_2" {
+
+# resource "null_resource" "configure-server" {
+#   triggers = {
+#     trigger = aws_instance.myapp-server.public_ip
+#   }
+#   provisioner "local-exec" {
+#     working_dir = "/home/zahran/ansible"
+#     command = "ansible-playbook --inventory ${aws_instance.myapp-server.public_ip}, --private-key ${var.ssh_key_private} --user ec2-user deploy-docker-ec2-user.yaml"
+#   }
+#   }
+
+resource "aws_instance" "myapp-server_2" {
   ami = data.aws_ami.latest-amazon-linux-image.id
 
   instance_type = var.instance_type
@@ -132,7 +145,7 @@ resource "aws_instance" "myapp-server" {
   vpc_security_group_ids = [aws_default_security_group.default-sg.id]
   subnet_id = aws_subnet.myapp-subnet-1.id
 
-  user_data = file("entry-script.sh")
+  #user_data = file("entry-script.sh")
 
    tags = {
     Name: "${var.env_prefix}-server_2"
@@ -150,9 +163,9 @@ resource "aws_instance" "myapp-server_3" {
   vpc_security_group_ids = [aws_default_security_group.default-sg.id]
   subnet_id = aws_subnet.myapp-subnet-1.id
 
-  user_data = file("entry-script.sh")
+  #user_data = file("entry-script.sh")
 
    tags = {
     Name: "${var.env_prefix}-server_3"
   }
-}*/
+}
